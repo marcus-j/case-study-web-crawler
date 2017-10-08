@@ -1,0 +1,1 @@
+java -jar build\libs\web-crawler-0.1.0.jar

@@ -1,0 +1,61 @@
+group 'de.marcusjanke.casestudies'
+version '0.1.0'
+
+buildscript {
+    ext.versions = [
+		springboot: "1.5.7.RELEASE",
+		jsoup: "1.10.3",
+		junit: "4.12",
+		assertj: "3.8.0"
+    ]
+
+    ext.pluginDependencies = [
+        springboot: "org.springframework.boot:spring-boot-gradle-plugin:${versions.springboot}"
+    ]
+
+    ext.allRepositories = {
+        jcenter()
+        mavenCentral()
+    }
+
+    repositories(allRepositories)
+
+    dependencies {
+        classpath pluginDependencies.springboot
+    }
+}
+
+repositories(allRepositories)
+ 
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+//quality plugins:
+apply plugin: "jacoco"
+//find bugs disabled due to wrong positives preventing build
+//apply plugin: 'findbugs'
+
+compileJava.options.encoding = 'UTF-8'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springboot
+	compile group: 'org.jsoup', name: 'jsoup', version: versions.jsoup   
+
+	testCompile group: 'org.assertj', name: 'assertj-core', version: versions.assertj
+    testCompile group: 'junit', name: 'junit', version: versions.junit
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springboot
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+check.dependsOn jacocoTestReport
